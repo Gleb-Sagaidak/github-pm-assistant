@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1140" height="810" viewBox="0 0 1140 810" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#707070"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1140" height="810" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="40" y="44" font-size="22" font-weight="bold" fill="#222222">System Context diagram — GitHub PM Assistant</text>
+  <text x="40" y="66" font-size="13" fill="#666666">C4 model, level 1</text>
+
+  <!-- ============ Persons ============ -->
+  <!-- Team Lead -->
+  <g>
+    <rect x="170" y="140" width="200" height="118" rx="28" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <circle cx="270" cy="116" r="30" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <text x="270" y="174" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Team Lead</text>
+    <text x="270" y="192" font-size="12" fill="#D6E2F0" text-anchor="middle">[Person]</text>
+    <text x="270" y="214" font-size="12.5" fill="#ffffff" text-anchor="middle">Lead of a small team who</text>
+    <text x="270" y="230" font-size="12.5" fill="#ffffff" text-anchor="middle">also manages the project</text>
+    <text x="270" y="246" font-size="12.5" fill="#ffffff" text-anchor="middle">in GitHub.</text>
+  </g>
+
+  <!-- Developer / Evaluator -->
+  <g>
+    <rect x="440" y="140" width="200" height="118" rx="28" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <circle cx="540" cy="116" r="30" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <text x="540" y="174" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Developer / Evaluator</text>
+    <text x="540" y="192" font-size="12" fill="#D6E2F0" text-anchor="middle">[Person]</text>
+    <text x="540" y="214" font-size="12.5" fill="#ffffff" text-anchor="middle">Runs the agents on prepared</text>
+    <text x="540" y="230" font-size="12.5" fill="#ffffff" text-anchor="middle">scenarios and evaluates</text>
+    <text x="540" y="246" font-size="12.5" fill="#ffffff" text-anchor="middle">their output.</text>
+  </g>
+
+  <!-- Team Member -->
+  <g>
+    <rect x="830" y="140" width="200" height="118" rx="28" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <circle cx="930" cy="116" r="30" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <text x="930" y="174" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">Team Member</text>
+    <text x="930" y="192" font-size="12" fill="#D6E2F0" text-anchor="middle">[Person]</text>
+    <text x="930" y="214" font-size="12.5" fill="#ffffff" text-anchor="middle">Writes issues and comments;</text>
+    <text x="930" y="230" font-size="12.5" fill="#ffffff" text-anchor="middle">does not use the system</text>
+    <text x="930" y="246" font-size="12.5" fill="#ffffff" text-anchor="middle">directly.</text>
+  </g>
+
+  <!-- ============ Software systems ============ -->
+  <!-- System in scope -->
+  <g>
+    <rect x="180" y="360" width="400" height="150" rx="8" fill="#1168BD" stroke="#0B4884" stroke-width="1.5"/>
+    <text x="380" y="394" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">GitHub PM Assistant</text>
+    <text x="380" y="414" font-size="12" fill="#D6E2F0" text-anchor="middle">[Software System]</text>
+    <text x="380" y="440" font-size="13" fill="#ffffff" text-anchor="middle">Two LLM agents (triage and progress) read</text>
+    <text x="380" y="457" font-size="13" fill="#ffffff" text-anchor="middle">the repository through read-only tools and</text>
+    <text x="380" y="474" font-size="13" fill="#ffffff" text-anchor="middle">propose changes. Only approved actions are</text>
+    <text x="380" y="491" font-size="13" fill="#ffffff" text-anchor="middle">applied to GitHub and recorded in an audit log.</text>
+  </g>
+
+  <!-- GitHub -->
+  <g>
+    <rect x="800" y="360" width="260" height="150" rx="8" fill="#999999" stroke="#8A8A8A" stroke-width="1.5"/>
+    <text x="930" y="394" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">GitHub</text>
+    <text x="930" y="414" font-size="12" fill="#F2F2F2" text-anchor="middle">[External Software System]</text>
+    <text x="930" y="440" font-size="13" fill="#ffffff" text-anchor="middle">Hosts the repository: Issues,</text>
+    <text x="930" y="457" font-size="13" fill="#ffffff" text-anchor="middle">Projects board, labels and</text>
+    <text x="930" y="474" font-size="13" fill="#ffffff" text-anchor="middle">collaborators. REST and GraphQL</text>
+    <text x="930" y="491" font-size="13" fill="#ffffff" text-anchor="middle">APIs, webhooks.</text>
+  </g>
+
+  <!-- LLM Provider -->
+  <g>
+    <rect x="180" y="650" width="400" height="130" rx="8" fill="#999999" stroke="#8A8A8A" stroke-width="1.5"/>
+    <text x="380" y="684" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">LLM Provider</text>
+    <text x="380" y="704" font-size="12" fill="#F2F2F2" text-anchor="middle">[External Software System]</text>
+    <text x="380" y="730" font-size="13" fill="#ffffff" text-anchor="middle">Hosted large language model API with</text>
+    <text x="380" y="747" font-size="13" fill="#ffffff" text-anchor="middle">tool calling. The provider can be replaced</text>
+    <text x="380" y="764" font-size="13" fill="#ffffff" text-anchor="middle">without changes to the core logic.</text>
+  </g>
+
+  <!-- ============ Relationships ============ -->
+  <g fill="none" stroke="#707070" stroke-width="1.5" stroke-dasharray="6 4">
+    <path d="M270,262 L270,356" marker-end="url(#arrow)"/>   <!-- lead -> system -->
+    <path d="M540,262 L540,356" marker-end="url(#arrow)"/>   <!-- dev -> system -->
+    <path d="M930,262 L930,356" marker-end="url(#arrow)"/>   <!-- member -> github -->
+    <path d="M584,410 L796,410" marker-end="url(#arrow)"/>   <!-- system -> github -->
+    <path d="M796,462 L584,462" marker-end="url(#arrow)"/>   <!-- github -> system -->
+    <path d="M380,514 L380,646" marker-end="url(#arrow)"/>   <!-- system -> llm -->
+  </g>
+
+  <!-- Relationship labels -->
+  <g font-size="12.5" fill="#333333">
+    <!-- lead -> system -->
+    <text x="282" y="294">Starts agents, reviews and</text>
+    <text x="282" y="309">approves proposals, views</text>
+    <text x="282" y="324">the audit log</text>
+    <text x="282" y="340" font-size="11.5" font-style="italic" fill="#666666">[HTTPS]</text>
+
+    <!-- dev -> system -->
+    <text x="552" y="294">Runs evaluation scenarios</text>
+    <text x="552" y="309">and exports the results</text>
+    <text x="552" y="325" font-size="11.5" font-style="italic" fill="#666666">[HTTPS]</text>
+
+    <!-- member -> github -->
+    <text x="942" y="294">Writes issues and</text>
+    <text x="942" y="309">comments; sees</text>
+    <text x="942" y="324">applied changes</text>
+    <text x="942" y="340" font-size="11.5" font-style="italic" fill="#666666">[Web browser]</text>
+
+    <!-- system -> github -->
+    <text x="690" y="368" text-anchor="middle">Reads issues and the board;</text>
+    <text x="690" y="383" text-anchor="middle">applies approved actions</text>
+    <text x="690" y="399" text-anchor="middle" font-size="11.5" font-style="italic" fill="#666666">[REST &amp; GraphQL, HTTPS]</text>
+
+    <!-- github -> system -->
+    <text x="690" y="484" text-anchor="middle">Notifies about new issues</text>
+    <text x="690" y="500" text-anchor="middle" font-size="11.5" font-style="italic" fill="#666666">[Webhooks, HTTPS]</text>
+
+    <!-- system -> llm -->
+    <text x="392" y="562">Sends prompts, tool definitions</text>
+    <text x="392" y="577">and tool results; receives tool</text>
+    <text x="392" y="592">calls and structured proposals</text>
+    <text x="392" y="608" font-size="11.5" font-style="italic" fill="#666666">[HTTPS, JSON]</text>
+  </g>
+
+  <!-- ============ Legend ============ -->
+  <g>
+    <rect x="800" y="640" width="300" height="140" rx="6" fill="none" stroke="#CCCCCC"/>
+    <text x="816" y="662" font-size="13" font-weight="bold" fill="#333333">Legend</text>
+    <rect x="816" y="672" width="36" height="20" rx="8" fill="#08427B"/>
+    <text x="864" y="687" font-size="12.5" fill="#333333">Person</text>
+    <rect x="816" y="700" width="36" height="20" rx="4" fill="#1168BD"/>
+    <text x="864" y="715" font-size="12.5" fill="#333333">Software system in scope</text>
+    <rect x="816" y="728" width="36" height="20" rx="4" fill="#999999"/>
+    <text x="864" y="743" font-size="12.5" fill="#333333">External software system</text>
+    <path d="M816,763 L850,763" fill="none" stroke="#707070" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+    <text x="864" y="767" font-size="12.5" fill="#333333">Relationship [technology]</text>
+  </g>
+</svg>

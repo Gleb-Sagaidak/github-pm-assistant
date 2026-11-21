@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1420" height="1365" viewBox="0 0 1420 1365" font-family="Arial, Helvetica, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#707070"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1420" height="1365" fill="#ffffff"/>
+
+  <!-- Title -->
+  <text x="40" y="42" font-size="22" font-weight="bold" fill="#222222">Component diagram — Backend Application</text>
+  <text x="40" y="64" font-size="13" fill="#666666">C4 model, level 3 · GitHub PM Assistant</text>
+
+  <!-- ============ Neighbours outside the container ============ -->
+  <!-- Web App (container) -->
+  <g>
+    <rect x="400" y="120" width="200" height="102" rx="8" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+    <text x="500" y="152" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">Web App</text>
+    <text x="500" y="170" font-size="11" fill="#E3EEF9" text-anchor="middle">[Container: TypeScript, React]</text>
+    <text x="500" y="194" font-size="12" fill="#ffffff" text-anchor="middle">Review UI for the Team Lead.</text>
+  </g>
+
+  <!-- Developer / Evaluator (person) -->
+  <g>
+    <rect x="660" y="120" width="200" height="102" rx="26" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <circle cx="760" cy="100" r="24" fill="#08427B" stroke="#073B6F" stroke-width="1.5"/>
+    <text x="760" y="150" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">Developer / Evaluator</text>
+    <text x="760" y="167" font-size="11" fill="#D6E2F0" text-anchor="middle">[Person]</text>
+    <text x="760" y="188" font-size="12" fill="#ffffff" text-anchor="middle">Runs the agents on</text>
+    <text x="760" y="203" font-size="12" fill="#ffffff" text-anchor="middle">prepared scenarios.</text>
+  </g>
+
+  <!-- GitHub (external) -->
+  <g>
+    <rect x="1170" y="310" width="200" height="110" rx="8" fill="#999999" stroke="#8A8A8A" stroke-width="1.5"/>
+    <text x="1270" y="340" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">GitHub</text>
+    <text x="1270" y="357" font-size="11" fill="#F2F2F2" text-anchor="middle">[External Software System]</text>
+    <text x="1270" y="378" font-size="12" fill="#ffffff" text-anchor="middle">Repository with Issues</text>
+    <text x="1270" y="393" font-size="12" fill="#ffffff" text-anchor="middle">and the Projects board.</text>
+  </g>
+
+  <!-- Database (container) -->
+  <g>
+    <path d="M1170,664 L1170,768 A100,12 0 0 0 1370,768 L1370,664 Z" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+    <ellipse cx="1270" cy="664" rx="100" ry="12" fill="#438DD5" stroke="#3C7FC0" stroke-width="1.5"/>
+    <text x="1270" y="700" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">Database</text>
+    <text x="1270" y="717" font-size="11" fill="#E3EEF9" text-anchor="middle">[Container: PostgreSQL]</text>
+    <text x="1270" y="738" font-size="12" fill="#ffffff" text-anchor="middle">Proposals, decisions,</text>
+    <text x="1270" y="753" font-size="12" fill="#ffffff" text-anchor="middle">append-only audit log.</text>
+  </g>
+
+  <!-- LLM Provider (external) -->
+  <g>
+    <rect x="70" y="1210" width="210" height="110" rx="8" fill="#999999" stroke="#8A8A8A" stroke-width="1.5"/>
+    <text x="175" y="1238" font-size="15" font-weight="bold" fill="#ffffff" text-anchor="middle">LLM Provider</text>
+    <text x="175" y="1255" font-size="11" fill="#F2F2F2" text-anchor="middle">[External Software System]</text>
+    <text x="175" y="1276" font-size="12" fill="#ffffff" text-anchor="middle">Hosted LLM API with</text>
+    <text x="175" y="1291" font-size="12" fill="#ffffff" text-anchor="middle">tool calling.</text>
+  </g>
+
+  <!-- ============ Container boundary ============ -->
+  <rect x="40" y="280" width="1080" height="875" rx="10" fill="none" stroke="#444444" stroke-width="1.5" stroke-dasharray="8 5"/>
+  <text x="1100" y="1124" font-size="14" font-weight="bold" fill="#444444" text-anchor="end">Backend Application</text>
+  <text x="1100" y="1140" font-size="11" fill="#666666" text-anchor="end">[Container: Java, Spring Boot]</text>
+
+  <!-- ============ Components ============ -->
+  <g fill="#85BBF0" stroke="#78A8D8" stroke-width="1.5">
+    <rect x="420" y="310" width="320" height="110" rx="8"/>  <!-- API Controllers -->
+    <rect x="70"  y="480" width="210" height="110" rx="8"/>  <!-- Agent Run Service -->
+    <rect x="610" y="480" width="210" height="110" rx="8"/>  <!-- Proposal Service -->
+    <rect x="880" y="480" width="210" height="110" rx="8"/>  <!-- Audit Log -->
+    <rect x="70"  y="650" width="210" height="110" rx="8"/>  <!-- Triage Agent -->
+    <rect x="340" y="650" width="210" height="110" rx="8"/>  <!-- Progress Agent -->
+    <rect x="610" y="650" width="210" height="110" rx="8"/>  <!-- Action Executor -->
+    <rect x="190" y="820" width="240" height="110" rx="8"/>  <!-- Agent Loop -->
+    <rect x="70"  y="990" width="210" height="110" rx="8"/>  <!-- LLM Gateway -->
+    <rect x="340" y="990" width="210" height="110" rx="8"/>  <!-- Read-only Tools -->
+    <rect x="610" y="990" width="210" height="110" rx="8"/>  <!-- GitHub Client -->
+  </g>
+
+  <g text-anchor="middle" fill="#0B2A4A">
+    <!-- API Controllers -->
+    <text x="580" y="336" font-size="14" font-weight="bold">API Controllers</text>
+    <text x="580" y="353" font-size="10.5" fill="#24507E">[Component: Spring MVC, Spring Security]</text>
+    <text x="580" y="373" font-size="11.5">REST endpoints for the Web App and evaluation;</text>
+    <text x="580" y="388" font-size="11.5">webhook endpoint with signature check.</text>
+    <text x="580" y="403" font-size="11.5">Users sign in with GitHub (OAuth).</text>
+
+    <!-- Agent Run Service -->
+    <text x="175" y="506" font-size="14" font-weight="bold">Agent Run Service</text>
+    <text x="175" y="523" font-size="10.5" fill="#24507E">[Component: @Async, @Scheduled]</text>
+    <text x="175" y="543" font-size="11.5">Queues runs from the API,</text>
+    <text x="175" y="558" font-size="11.5">webhooks and the schedule;</text>
+    <text x="175" y="573" font-size="11.5">runs them in the background.</text>
+
+    <!-- Proposal Service -->
+    <text x="715" y="506" font-size="14" font-weight="bold">Proposal Service</text>
+    <text x="715" y="523" font-size="10.5" fill="#24507E">[Component: Spring service]</text>
+    <text x="715" y="543" font-size="11.5">Validates agent output,</text>
+    <text x="715" y="558" font-size="11.5">stores proposals, handles</text>
+    <text x="715" y="573" font-size="11.5">approve/reject decisions.</text>
+
+    <!-- Audit Log -->
+    <text x="985" y="506" font-size="14" font-weight="bold">Audit Log</text>
+    <text x="985" y="523" font-size="10.5" fill="#24507E">[Component: Spring service]</text>
+    <text x="985" y="543" font-size="11.5">Appends audit records and</text>
+    <text x="985" y="558" font-size="11.5">answers audit queries.</text>
+    <text x="985" y="573" font-size="11.5">No update or delete.</text>
+
+    <!-- Triage Agent -->
+    <text x="175" y="676" font-size="14" font-weight="bold">Triage Agent</text>
+    <text x="175" y="693" font-size="10.5" fill="#24507E">[Component: agent definition]</text>
+    <text x="175" y="713" font-size="11.5">Prompt, tools and schema:</text>
+    <text x="175" y="728" font-size="11.5">category, labels, priority,</text>
+    <text x="175" y="743" font-size="11.5">assignee.</text>
+
+    <!-- Progress Agent -->
+    <text x="445" y="676" font-size="14" font-weight="bold">Progress Agent</text>
+    <text x="445" y="693" font-size="10.5" fill="#24507E">[Component: agent definition]</text>
+    <text x="445" y="713" font-size="11.5">Prompt, tools and schema:</text>
+    <text x="445" y="728" font-size="11.5">stale tasks, dependencies,</text>
+    <text x="445" y="743" font-size="11.5">deviations, sprint summary.</text>
+
+    <!-- Action Executor -->
+    <text x="715" y="676" font-size="14" font-weight="bold">Action Executor</text>
+    <text x="715" y="693" font-size="10.5" fill="#24507E">[Component: Spring service]</text>
+    <text x="715" y="713" font-size="11.5">The only writer to GitHub.</text>
+    <text x="715" y="728" font-size="11.5">Re-checks the issue state,</text>
+    <text x="715" y="743" font-size="11.5">applies actions idempotently.</text>
+
+    <!-- Agent Loop -->
+    <text x="310" y="846" font-size="14" font-weight="bold">Agent Loop</text>
+    <text x="310" y="863" font-size="10.5" fill="#24507E">[Component: ReAct loop]</text>
+    <text x="310" y="883" font-size="11.5">Calls the LLM, runs requested tools,</text>
+    <text x="310" y="898" font-size="11.5">repeats until a final answer.</text>
+    <text x="310" y="913" font-size="11.5">Enforces step, time, token limits.</text>
+
+    <!-- LLM Gateway -->
+    <text x="175" y="1016" font-size="14" font-weight="bold">LLM Gateway</text>
+    <text x="175" y="1033" font-size="10.5" fill="#24507E">[Component: LLM port + adapter]</text>
+    <text x="175" y="1053" font-size="11.5">Provider-independent chat</text>
+    <text x="175" y="1068" font-size="11.5">with tool calling. Holds</text>
+    <text x="175" y="1083" font-size="11.5">the API key.</text>
+
+    <!-- Read-only Tools -->
+    <text x="445" y="1016" font-size="14" font-weight="bold">Read-only Tools</text>
+    <text x="445" y="1033" font-size="10.5" fill="#24507E">[Component: tool registry]</text>
+    <text x="445" y="1053" font-size="11.5">Similar issues, history,</text>
+    <text x="445" y="1068" font-size="11.5">labels, collaborators, stale</text>
+    <text x="445" y="1083" font-size="11.5">issues, iteration status.</text>
+
+    <!-- GitHub Client -->
+    <text x="715" y="1016" font-size="14" font-weight="bold">GitHub Client</text>
+    <text x="715" y="1033" font-size="10.5" fill="#24507E">[Component: REST &amp; GraphQL client]</text>
+    <text x="715" y="1053" font-size="11.5">GitHub App tokens, pinned</text>
+    <text x="715" y="1068" font-size="11.5">API version, retries with</text>
+    <text x="715" y="1083" font-size="11.5">backoff. Read/write split.</text>
+  </g>
+
+  <!-- ============ Relationships ============ -->
+  <g fill="none" stroke="#707070" stroke-width="1.5" stroke-dasharray="6 4">
+    <path d="M500,226 L500,306" marker-end="url(#arrow)"/>                      <!-- web -> api -->
+    <path d="M745,226 L705,306" marker-end="url(#arrow)"/>                      <!-- dev -> api -->
+    <path d="M1166,365 L744,365" marker-end="url(#arrow)"/>                     <!-- github -> api -->
+    <path d="M450,424 L262,476" marker-end="url(#arrow)"/>                      <!-- api -> runs -->
+    <path d="M680,424 L680,476" marker-end="url(#arrow)"/>                      <!-- api -> proposals -->
+    <path d="M735,424 L900,476" marker-end="url(#arrow)"/>                      <!-- api -> audit -->
+    <path d="M284,535 L606,535" marker-end="url(#arrow)"/>                      <!-- runs -> proposals -->
+    <path d="M824,535 L876,535" marker-end="url(#arrow)"/>                      <!-- proposals -> audit -->
+    <path d="M175,594 L175,646" marker-end="url(#arrow)"/>                      <!-- runs -> triage -->
+    <path d="M255,594 L375,646" marker-end="url(#arrow)"/>                      <!-- runs -> progress -->
+    <path d="M715,594 L715,646" marker-end="url(#arrow)"/>                      <!-- proposals -> executor -->
+    <path d="M215,764 L245,816" marker-end="url(#arrow)"/>                      <!-- triage -> loop -->
+    <path d="M405,764 L375,816" marker-end="url(#arrow)"/>                      <!-- progress -> loop -->
+    <path d="M245,934 L210,986" marker-end="url(#arrow)"/>                      <!-- loop -> llm gateway -->
+    <path d="M375,934 L410,986" marker-end="url(#arrow)"/>                      <!-- loop -> tools -->
+    <path d="M554,1045 L606,1045" marker-end="url(#arrow)"/>                    <!-- tools -> github client -->
+    <path d="M715,764 L715,986" marker-end="url(#arrow)"/>                      <!-- executor -> github client -->
+    <path d="M824,1045 L1395,1045 L1395,365 L1374,365" marker-end="url(#arrow)"/> <!-- github client -> github -->
+    <path d="M175,1104 L175,1206" marker-end="url(#arrow)"/>                    <!-- llm gateway -> llm -->
+    <path d="M1094,535 L1270,535 L1270,648" marker-end="url(#arrow)"/>          <!-- audit -> db -->
+    <path d="M820,575 L850,575 L850,725 L1166,725" marker-end="url(#arrow)"/>   <!-- proposals -> db -->
+  </g>
+
+  <!-- Relationship labels -->
+  <g font-size="11.5" fill="#333333">
+    <!-- web -> api -->
+    <text x="490" y="252" text-anchor="end">Makes API calls</text>
+    <text x="490" y="267" text-anchor="end" font-size="10.5" font-style="italic" fill="#666666">[JSON, HTTPS]</text>
+
+    <!-- dev -> api -->
+    <text x="752" y="252">Runs evaluation scenarios</text>
+    <text x="752" y="267" font-size="10.5" font-style="italic" fill="#666666">[REST API, HTTPS]</text>
+
+    <!-- github -> api -->
+    <text x="955" y="343" text-anchor="middle">Sends webhook events</text>
+    <text x="955" y="357" text-anchor="middle" font-size="10.5" font-style="italic" fill="#666666">[Webhooks, HTTPS]</text>
+
+    <!-- api -> runs / proposals / audit -->
+    <text x="330" y="452" text-anchor="end">Starts runs</text>
+    <text x="670" y="444" text-anchor="end">Reads proposals,</text>
+    <text x="670" y="458" text-anchor="end">sends decisions</text>
+    <text x="822" y="446">Queries audit records</text>
+
+    <!-- runs -> proposals, proposals -> audit -->
+    <text x="445" y="526" text-anchor="middle">Submits run results</text>
+    <text x="850" y="513" text-anchor="middle">Writes</text>
+    <text x="850" y="526" text-anchor="middle">records</text>
+
+    <!-- runs -> agents, proposals -> executor -->
+    <text x="185" y="624">Runs</text>
+    <text x="322" y="616">Runs</text>
+    <text x="725" y="616">Passes approved</text>
+    <text x="725" y="630">actions</text>
+
+    <!-- agents -> loop -->
+    <text x="220" y="794" text-anchor="end">Uses</text>
+    <text x="400" y="794">Uses</text>
+
+    <!-- loop -> llm gateway / tools -->
+    <text x="215" y="955" text-anchor="end">Sends messages and</text>
+    <text x="215" y="969" text-anchor="end">tool definitions</text>
+    <text x="405" y="955">Executes</text>
+    <text x="405" y="969">tool calls</text>
+
+    <!-- tools -> github client, executor -> github client -->
+    <text x="580" y="1036" text-anchor="middle">Reads</text>
+    <text x="725" y="870">Applies changes</text>
+    <text x="725" y="884">(write interface)</text>
+
+    <!-- github client -> github -->
+    <text x="965" y="1022" text-anchor="middle">Reads and writes data</text>
+    <text x="965" y="1036" text-anchor="middle" font-size="10.5" font-style="italic" fill="#666666">[REST &amp; GraphQL, HTTPS]</text>
+
+    <!-- llm gateway -> llm -->
+    <text x="187" y="1180">Sends requests</text>
+    <text x="187" y="1194" font-size="10.5" font-style="italic" fill="#666666">[HTTPS, JSON]</text>
+
+    <!-- audit -> db -->
+    <text x="1280" y="590">Appends records</text>
+    <text x="1280" y="604" font-size="10.5" font-style="italic" fill="#666666">[JDBC]</text>
+
+    <!-- proposals -> db -->
+    <text x="1010" y="703" text-anchor="middle">Stores proposals</text>
+    <text x="1010" y="717" text-anchor="middle" font-size="10.5" font-style="italic" fill="#666666">[JDBC]</text>
+  </g>
+
+  <!-- ============ Legend ============ -->
+  <g>
+    <rect x="1150" y="1172" width="240" height="176" rx="6" fill="none" stroke="#CCCCCC"/>
+    <text x="1166" y="1193" font-size="13" font-weight="bold" fill="#333333">Legend</text>
+    <rect x="1166" y="1205" width="34" height="16" rx="7" fill="#08427B"/>
+    <text x="1210" y="1218" font-size="12" fill="#333333">Person</text>
+    <rect x="1166" y="1228" width="34" height="16" rx="4" fill="#438DD5"/>
+    <text x="1210" y="1241" font-size="12" fill="#333333">Container</text>
+    <rect x="1166" y="1251" width="34" height="16" rx="4" fill="#85BBF0"/>
+    <text x="1210" y="1264" font-size="12" fill="#333333">Component</text>
+    <rect x="1166" y="1274" width="34" height="16" rx="4" fill="#999999"/>
+    <text x="1210" y="1287" font-size="12" fill="#333333">External software system</text>
+    <rect x="1166" y="1297" width="34" height="16" rx="4" fill="none" stroke="#444444" stroke-width="1.5" stroke-dasharray="5 3"/>
+    <text x="1210" y="1310" font-size="12" fill="#333333">Container boundary</text>
+    <path d="M1166,1328 L1198,1328" fill="none" stroke="#707070" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+    <text x="1210" y="1332" font-size="12" fill="#333333">Relationship [technology]</text>
+  </g>
+</svg>

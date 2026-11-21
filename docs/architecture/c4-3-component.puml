@@ -1,0 +1,57 @@
+@startuml c4-3-component
+' C4 model, level 3: Component (Backend Application)
+' Render: IntelliJ / VS Code PlantUML plugin, or `java -jar plantuml.jar -tsvg c4-3-component.puml`
+!include <C4/C4_Component>
+
+LAYOUT_TOP_DOWN()
+
+title Component diagram - Backend Application (GitHub PM Assistant)
+
+Container(web, "Web App", "TypeScript, React", "Review UI for the Team Lead.")
+Person(dev, "Developer / Evaluator", "Runs the agents on prepared scenarios.")
+System_Ext(github, "GitHub", "Repository with Issues and the Projects board.")
+System_Ext(llm, "LLM Provider", "Hosted LLM API with tool calling.")
+ContainerDb(db, "Database", "PostgreSQL", "Proposals, decisions, append-only audit log.")
+
+Container_Boundary(backend, "Backend Application") {
+  Component(api, "API Controllers", "Spring MVC, Spring Security", "REST endpoints for the Web App and evaluation; webhook endpoint with signature check. Users sign in with GitHub (OAuth).")
+  Component(runs, "Agent Run Service", "Spring @Async, @Scheduled", "Queues runs from the API, webhooks and the schedule; runs them in the background.")
+  Component(triage, "Triage Agent", "Agent definition", "Prompt, tools and output schema: category, labels, priority, assignee.")
+  Component(progress, "Progress Agent", "Agent definition", "Prompt, tools and output schema: stale tasks, dependencies, deviations, sprint summary.")
+  Component(loop, "Agent Loop", "ReAct loop", "Calls the LLM, runs requested tools, repeats until a final answer. Enforces step, time and token limits.")
+  Component(llmgw, "LLM Gateway", "LLM port + adapter", "Provider-independent chat with tool calling. Holds the API key.")
+  Component(tools, "Read-only Tools", "Tool registry", "Similar issues, history, labels, collaborators, stale issues, iteration status.")
+  Component(proposals, "Proposal Service", "Spring service", "Validates agent output, stores proposals, handles approve/reject decisions.")
+  Component(audit, "Audit Log", "Spring service", "Appends audit records and answers audit queries. No update or delete.")
+  Component(executor, "Action Executor", "Spring service", "The only writer to GitHub. Checks the issue is unchanged, applies actions idempotently.")
+  Component(ghclient, "GitHub Client", "REST & GraphQL client", "GitHub App tokens, pinned API version, retries with backoff. Separate read and write interfaces.")
+}
+
+Rel_D(web, api, "Makes API calls", "JSON, HTTPS")
+Rel_D(dev, api, "Runs evaluation scenarios", "REST API, HTTPS")
+Rel_L(github, api, "Sends webhook events", "Webhooks, HTTPS")
+
+Rel(api, runs, "Starts runs")
+Rel(api, proposals, "Reads proposals, sends decisions")
+Rel(api, audit, "Queries audit records")
+
+Rel_R(runs, proposals, "Submits run results")
+Rel_D(runs, triage, "Runs")
+Rel_D(runs, progress, "Runs")
+Rel_D(triage, loop, "Uses")
+Rel_D(progress, loop, "Uses")
+Rel_D(loop, llmgw, "Sends messages and tool definitions")
+Rel_D(loop, tools, "Executes tool calls")
+Rel_R(tools, ghclient, "Reads")
+
+Rel_R(proposals, audit, "Writes records")
+Rel_D(proposals, executor, "Passes approved actions")
+Rel_D(executor, ghclient, "Applies changes (write interface)")
+
+Rel(ghclient, github, "Reads and writes data", "REST & GraphQL, HTTPS")
+Rel_D(llmgw, llm, "Sends requests", "HTTPS, JSON")
+Rel(proposals, db, "Stores proposals", "JDBC")
+Rel(audit, db, "Appends records", "JDBC")
+
+SHOW_LEGEND()
+@enduml

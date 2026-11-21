@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: pmassistant
+  profiles:
+    default: dev
+  # Локальный запуск: значения можно положить в .env (в корне репозитория или в backend/), вне git.
+  config:
+    import:
+      - "optional:file:../.env[.properties]"
+      - "optional:file:.env[.properties]"
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: ${app.github.client-id}
+            client-secret: ${app.github.client-secret}
+
+app:
+  github:
+    app-id: ${GITHUB_APP_ID}
+    app-slug: ${GITHUB_APP_SLUG}                  # для ссылки установки
+    private-key-path: ${GITHUB_APP_PRIVATE_KEY_PATH}
+    client-id: ${GITHUB_APP_CLIENT_ID}            # OAuth входа пользователей; валидируется в AppProperties
+    client-secret: ${GITHUB_APP_CLIENT_SECRET}
+    webhook-secret: ${GITHUB_WEBHOOK_SECRET:}     # этап 8
+    api-version: "2026-03-10"
+  llm:
+    api-key: ${ANTHROPIC_API_KEY}
+    model: claude-opus-5-5
+  defaults:                                       # переопределяются на workspace
+    daily-token-quota: 500000
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health

@@ -1,0 +1,34 @@
+@startuml c4-2-container
+' C4 model, level 2: Container
+' Render: IntelliJ / VS Code PlantUML plugin, or `java -jar plantuml.jar -tsvg c4-2-container.puml`
+!include <C4/C4_Container>
+
+LAYOUT_TOP_DOWN()
+
+title Container diagram - GitHub PM Assistant
+
+Person(lead, "Team Lead", "Lead of a small team who also manages the project in GitHub.")
+Person(dev, "Developer / Evaluator", "Runs the agents on prepared scenarios and evaluates their output.")
+Person(member, "Team Member", "Writes issues and comments; does not use the system directly.")
+
+System_Boundary(assistant, "GitHub PM Assistant") {
+  Container(web, "Web App", "TypeScript, React", "Single-page app: shows proposals with justification, agent steps and the original issue text; lets the lead approve or reject them.")
+  Container(backend, "Backend Application", "Java, Spring Boot", "REST API and webhook endpoint. Runs the triage and progress agents (on demand, on new issues, on a schedule), validates proposals and applies only approved actions.")
+  ContainerDb(db, "Database", "PostgreSQL", "Agent runs with steps and metrics, proposals, decisions; append-only audit log.")
+}
+
+System_Ext(github, "GitHub", "Hosts the repository: Issues, Projects board, labels and collaborators. REST and GraphQL APIs, OAuth, webhooks.")
+System_Ext(llm, "LLM Provider", "Hosted large language model API with tool calling. Replaceable without changes to the core logic.")
+
+Rel_D(lead, web, "Reviews and approves proposals, starts agents, views the audit log", "HTTPS")
+Rel_D(dev, backend, "Runs evaluation scenarios and exports the results", "REST API, HTTPS")
+Rel_D(member, github, "Writes issues and comments; sees applied changes", "Web browser")
+
+Rel_R(web, backend, "Makes API calls", "JSON, HTTPS")
+Rel_D(backend, db, "Stores runs, proposals and audit records", "JDBC")
+Rel_R(backend, github, "Reads repository data, applies approved actions, authenticates users", "REST & GraphQL, OAuth, HTTPS")
+Rel_L(github, backend, "Notifies about new issues", "Webhooks, HTTPS")
+Rel(backend, llm, "Sends prompts and tool results; receives tool calls and proposals", "HTTPS, JSON")
+
+SHOW_LEGEND()
+@enduml

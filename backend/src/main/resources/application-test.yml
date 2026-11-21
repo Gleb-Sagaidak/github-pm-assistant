@@ -1,0 +1,11 @@
+# Профиль test: датасорс поднимает Testcontainers (@ServiceConnection), секреты — заглушки.
+# Реальных значений здесь быть не должно.
+app:
+  github:
+    app-id: "0"
+    app-slug: test-app
+    private-key-path: test-private-key.pem
+    client-id: test-client-id
+    client-secret: test-client-secret
+  llm:
+    api-key: test-api-key

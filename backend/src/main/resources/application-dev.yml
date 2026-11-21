@@ -1,0 +1,6 @@
+# Профиль dev: Postgres из docker-compose.yml в корне репозитория.
+spring:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:${DB_PORT:5432}/pmassistant}
+    username: ${DB_USER:pmassistant}
+    password: ${DB_PASSWORD:pmassistant}

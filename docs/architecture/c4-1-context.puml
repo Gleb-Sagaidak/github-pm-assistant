@@ -1,0 +1,28 @@
+@startuml c4-1-context
+' C4 model, level 1: System Context
+' Render: IntelliJ / VS Code PlantUML plugin, or `java -jar plantuml.jar -tsvg c4-1-context.puml`
+!include <C4/C4_Context>
+
+LAYOUT_TOP_DOWN()
+
+title System Context diagram - GitHub PM Assistant
+
+Person(lead, "Team Lead", "Lead of a small team who also manages the project in GitHub.")
+Person(dev, "Developer / Evaluator", "Runs the agents on prepared scenarios and evaluates their output.")
+Person(member, "Team Member", "Writes issues and comments; does not use the system directly.")
+
+System(assistant, "GitHub PM Assistant", "Two LLM agents (triage and progress) read the repository through read-only tools and propose changes. Only approved actions are applied to GitHub and recorded in an audit log.")
+
+System_Ext(github, "GitHub", "Hosts the repository: Issues, Projects board, labels and collaborators. REST and GraphQL APIs, webhooks.")
+System_Ext(llm, "LLM Provider", "Hosted large language model API with tool calling. The provider can be replaced without changes to the core logic.")
+
+Rel_D(lead, assistant, "Starts agents, reviews and approves proposals, views the audit log", "HTTPS")
+Rel_D(dev, assistant, "Runs evaluation scenarios and exports the results", "HTTPS")
+Rel_D(member, github, "Writes issues and comments; sees applied changes", "Web browser")
+
+Rel_R(assistant, github, "Reads issues and the project board; applies approved actions", "REST & GraphQL, HTTPS")
+Rel_L(github, assistant, "Notifies about new issues", "Webhooks, HTTPS")
+Rel_D(assistant, llm, "Sends prompts, tool definitions and tool results; receives tool calls and structured proposals", "HTTPS, JSON")
+
+SHOW_LEGEND()
+@enduml
