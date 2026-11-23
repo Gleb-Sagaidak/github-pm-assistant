@@ -7,9 +7,15 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.function.Function;
 
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -24,8 +30,9 @@ import tools.jackson.databind.json.JsonMapper;
 
 /**
  * The single place that talks HTTP to GitHub: adds the standard headers and a fresh bearer token to every
- * request and turns every failure into a {@link GitHubApiException}. It does not retry (see the retry layer)
- * and does not follow redirects: the token must never be sent to a host other than the configured one.
+ * request, retries temporary failures through {@link RetryExecutor} and turns every other failure into a
+ * {@link GitHubApiException}. It does not follow redirects: the token must never be sent to a host other than
+ * the configured one.
  */
 public class GitHubHttp {
 
@@ -33,11 +40,18 @@ public class GitHubHttp {
 	static final Duration CONNECT_TIMEOUT = Duration.ofSeconds(10);
 	static final Duration READ_TIMEOUT = Duration.ofSeconds(30);
 
+	/** Default cap on pages per listing: 100 pages of 100 items. */
+	static final int DEFAULT_MAX_PAGES = 100;
+	static final int PER_PAGE = 100;
+
 	private static final int MAX_MESSAGE_LENGTH = 300;
 
 	private final String baseUrl;
+	private final URI baseUri;
+	private final int maxPages;
 	private final BearerTokenSource tokens;
 	private final Clock clock;
+	private final RetryExecutor retry;
 	private final RestClient client;
 	private final JsonMapper errorMapper = JsonMapper.builder().build();
 
@@ -45,10 +59,22 @@ public class GitHubHttp {
 	 * @param baseUrl    {@code https://api.github.com}; WireMock's URL in tests
 	 * @param apiVersion value of {@code X-GitHub-Api-Version}, e.g. {@code 2026-03-10}
 	 */
-	public GitHubHttp(String baseUrl, String apiVersion, BearerTokenSource tokens, Clock clock) {
+	public GitHubHttp(String baseUrl, String apiVersion, BearerTokenSource tokens, Clock clock,
+			RetryExecutor retry) {
+		this(baseUrl, apiVersion, tokens, clock, retry, DEFAULT_MAX_PAGES);
+	}
+
+	/**
+	 * @param maxPages most pages {@code getAll} may fetch for one listing before it fails
+	 */
+	public GitHubHttp(String baseUrl, String apiVersion, BearerTokenSource tokens, Clock clock,
+			RetryExecutor retry, int maxPages) {
 		this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
+		this.baseUri = URI.create(this.baseUrl);
+		this.maxPages = maxPages;
 		this.tokens = tokens;
 		this.clock = clock;
+		this.retry = retry;
 		HttpClient httpClient = HttpClient.newBuilder()
 				.version(HttpClient.Version.HTTP_1_1)
 				.connectTimeout(CONNECT_TIMEOUT)
@@ -76,18 +102,106 @@ public class GitHubHttp {
 		return exchange(HttpMethod.POST, path, body, ParameterizedTypeReference.<T>forType(type)).body();
 	}
 
+	/** Fetches every page of a list endpoint ({@code per_page=100}) and returns the items in order. */
+	public <T> List<T> getAll(String path, Class<T> elementType) {
+		ParameterizedTypeReference<List<T>> listType = ParameterizedTypeReference
+				.forType(ResolvableType.forClassWithGenerics(List.class, elementType).getType());
+		return getAll(path, listType, Function.identity());
+	}
+
 	/**
-	 * Performs one request.
+	 * Fetches every page by following {@code Link: rel="next"}, for endpoints whose pages are wrapped in an
+	 * object (such as {@code {"total_count": 3, "installations": [...]}}).
+	 *
+	 * @param items extracts the list of items from one page
+	 * @throws PaginationException if there are more than {@code maxPages} pages, the links loop, or a link
+	 *                             points to another host; a partial list is never returned
+	 */
+	public <P, T> List<T> getAll(String path, ParameterizedTypeReference<P> pageType, Function<P, List<T>> items) {
+		List<T> result = new ArrayList<>();
+		Set<String> seen = new HashSet<>();
+		String next = withPerPage(path);
+		for (int page = 1; next != null; page++) {
+			if (page > maxPages) {
+				throw new PaginationException("More than " + maxPages + " pages for " + path);
+			}
+			if (!seen.add(next)) {
+				throw new PaginationException("Pagination loop at " + next);
+			}
+			GitHubResponse<P> response = exchange(HttpMethod.GET, next, null, pageType);
+			if (response.body() != null) {
+				result.addAll(items.apply(response.body()));
+			}
+			next = nextPath(response.headers());
+		}
+		return result;
+	}
+
+	private static String withPerPage(String path) {
+		if (path.contains("per_page=")) {
+			return path;
+		}
+		return path + (path.contains("?") ? "&" : "?") + "per_page=" + PER_PAGE;
+	}
+
+	/** The next page as a path relative to the base URL; null on the last page. */
+	private String nextPath(HttpHeaders headers) {
+		String link = LinkHeader.next(headers.get(HttpHeaders.LINK));
+		if (link == null) {
+			return null;
+		}
+		URI uri;
+		try {
+			uri = URI.create(link);
+		}
+		catch (IllegalArgumentException e) {
+			throw new PaginationException("Malformed next link: " + link, e);
+		}
+		if (uri.isAbsolute() && !sameOrigin(uri, baseUri)) {
+			throw new PaginationException("Next link leads to another host, not followed: " + link);
+		}
+		String path = uri.getRawPath() == null ? "" : uri.getRawPath();
+		String basePath = baseUri.getRawPath() == null ? "" : baseUri.getRawPath();
+		if (uri.isAbsolute() && !basePath.isEmpty() && path.startsWith(basePath)) {
+			path = path.substring(basePath.length());
+		}
+		if (!path.startsWith("/")) {
+			throw new PaginationException("Unexpected next link: " + link);
+		}
+		return uri.getRawQuery() == null ? path : path + "?" + uri.getRawQuery();
+	}
+
+	private static boolean sameOrigin(URI a, URI b) {
+		return a.getScheme().equalsIgnoreCase(b.getScheme())
+				&& a.getHost() != null && a.getHost().equalsIgnoreCase(b.getHost())
+				&& effectivePort(a) == effectivePort(b);
+	}
+
+	private static int effectivePort(URI uri) {
+		if (uri.getPort() != -1) {
+			return uri.getPort();
+		}
+		return "https".equalsIgnoreCase(uri.getScheme()) ? 443 : 80;
+	}
+
+	/**
+	 * Performs a request, repeating it while the failure is temporary (see {@link RetryExecutor}). Every attempt
+	 * asks the token source again.
 	 *
 	 * @param path path and query relative to the base URL, starting with {@code /}; already URL-encoded
 	 * @param body request body to serialize as JSON, or {@code null}
-	 * @throws GitHubApiException for every non-2xx answer and for network failures
+	 * @throws GitHubApiException for every non-2xx answer and for network failures, after retries
 	 */
 	public <T> GitHubResponse<T> exchange(HttpMethod method, String path, Object body,
 			ParameterizedTypeReference<T> type) {
 		if (!path.startsWith("/")) {
 			throw new IllegalArgumentException("GitHub path must be relative and start with '/': " + path);
 		}
+		return retry.execute(() -> attempt(method, path, body, type));
+	}
+
+	private <T> GitHubResponse<T> attempt(HttpMethod method, String path, Object body,
+			ParameterizedTypeReference<T> type) {
 		String methodName = method.name();
 		RestClient.RequestBodySpec request = client.method(method)
 				.uri(URI.create(baseUrl + path))

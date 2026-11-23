@@ -39,7 +39,8 @@ class GitHubHttpTest {
 			.build();
 
 	private GitHubHttp http(BearerTokenSource tokens) {
-		return new GitHubHttp(github.baseUrl(), "2026-03-10", tokens, Clock.fixed(NOW, ZoneOffset.UTC));
+		return new GitHubHttp(github.baseUrl(), "2026-03-10", tokens, Clock.fixed(NOW, ZoneOffset.UTC),
+				RetryExecutor.noRetry());
 	}
 
 	private GitHubHttp http() {
