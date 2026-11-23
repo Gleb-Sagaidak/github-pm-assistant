@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1000000012,
+    "node_id": "I_kwDOAAAAB87NZxAA",
+    "number": 12,
+    "title": "Migrate session storage",
+    "state": "open",
+    "repository_url": "https://api.github.com/repos/cvut-team/pm-assistant",
+    "html_url": "https://github.com/cvut-team/pm-assistant/issues/12",
+    "user": { "login": "alice", "id": 888, "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4" },
+    "labels": [],
+    "assignees": [],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2026-11-03T10:00:00Z",
+    "updated_at": "2026-11-04T10:00:00Z",
+    "closed_at": null,
+    "body": "Blocks the login fix."
+  }
+]

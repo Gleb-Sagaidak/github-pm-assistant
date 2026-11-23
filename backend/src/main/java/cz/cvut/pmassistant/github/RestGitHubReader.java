@@ -68,17 +68,17 @@ public class RestGitHubReader implements GitHubReader {
 
 	@Override
 	public List<IssueLink> listBlockedBy(RepoRef repo, int issueNumber) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return http.getAll(repoPath(repo) + "/issues/" + issueNumber + "/dependencies/blocked_by", IssueLink.class);
 	}
 
 	@Override
 	public List<IssueLink> listBlocking(RepoRef repo, int issueNumber) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return http.getAll(repoPath(repo) + "/issues/" + issueNumber + "/dependencies/blocking", IssueLink.class);
 	}
 
 	@Override
 	public List<IssueLink> listSubIssues(RepoRef repo, int issueNumber) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return http.getAll(repoPath(repo) + "/issues/" + issueNumber + "/sub_issues", IssueLink.class);
 	}
 
 	private static String repoPath(RepoRef repo) {
