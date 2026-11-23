@@ -1,0 +1,19 @@
+[
+  {
+    "html_url": "https://github.com/cvut-team/pm-assistant/issues/9",
+    "id": 1000000009,
+    "number": 9,
+    "title": "Add dark mode",
+    "user": { "login": "carol", "id": 890, "avatar_url": "https://avatars.githubusercontent.com/u/890?v=4" },
+    "labels": [],
+    "state": "closed",
+    "assignees": [ { "login": "carol", "id": 890, "avatar_url": "https://avatars.githubusercontent.com/u/890?v=4" } ],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2026-11-07T11:00:00Z",
+    "updated_at": "2026-11-09T16:00:00Z",
+    "closed_at": "2026-11-09T16:00:00Z",
+    "state_reason": "completed",
+    "body": null
+  }
+]

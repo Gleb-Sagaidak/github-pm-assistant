@@ -1,0 +1,41 @@
+[
+  {
+    "html_url": "https://github.com/cvut-team/pm-assistant/issues/7",
+    "id": 1000000007,
+    "number": 7,
+    "title": "Login fails with expired session",
+    "user": { "login": "alice", "id": 888, "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4" },
+    "labels": [ { "id": 5500001, "name": "bug", "color": "d73a4a", "description": "Something isn't working" } ],
+    "state": "open",
+    "assignees": [],
+    "milestone": null,
+    "comments": 2,
+    "created_at": "2026-11-01T10:00:00Z",
+    "updated_at": "2026-11-05T14:30:00Z",
+    "closed_at": null,
+    "state_reason": null,
+    "body": "After the session expires the login page loops."
+  },
+  {
+    "html_url": "https://github.com/cvut-team/pm-assistant/pull/8",
+    "id": 1000000008,
+    "number": 8,
+    "title": "Fix session refresh",
+    "user": { "login": "bob", "id": 889, "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4" },
+    "labels": [],
+    "state": "open",
+    "assignees": [],
+    "milestone": null,
+    "comments": 0,
+    "created_at": "2026-11-06T09:00:00Z",
+    "updated_at": "2026-11-06T09:00:00Z",
+    "closed_at": null,
+    "state_reason": null,
+    "body": "Refreshes the session before it expires.",
+    "pull_request": {
+      "url": "https://api.github.com/repos/cvut-team/pm-assistant/pulls/8",
+      "html_url": "https://github.com/cvut-team/pm-assistant/pull/8",
+      "merged_at": null
+    }
+  }
+]
