@@ -1,0 +1,45 @@
+[
+  {
+    "id": 1001,
+    "account": {
+      "login": "cvut-team",
+      "id": 777,
+      "type": "Organization",
+      "avatar_url": "https://avatars.githubusercontent.com/u/777?v=4",
+      "site_admin": false
+    },
+    "repository_selection": "selected",
+    "app_id": 55,
+    "target_type": "Organization",
+    "permissions": {
+      "issues": "write",
+      "metadata": "read",
+      "organization_projects": "write"
+    },
+    "events": [],
+    "created_at": "2026-11-20T10:00:00Z",
+    "updated_at": "2026-11-21T08:30:00Z",
+    "suspended_at": null
+  },
+  {
+    "id": 1002,
+    "account": {
+      "login": "alice",
+      "id": 888,
+      "type": "User",
+      "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4",
+      "site_admin": false
+    },
+    "repository_selection": "all",
+    "app_id": 55,
+    "target_type": "User",
+    "permissions": {
+      "issues": "write",
+      "metadata": "read"
+    },
+    "events": [],
+    "created_at": "2026-11-18T09:15:00Z",
+    "updated_at": "2026-11-19T12:00:00Z",
+    "suspended_at": "2026-11-22T07:00:00Z"
+  }
+]
