@@ -1,0 +1,25 @@
+[
+  {
+    "id": 5500001,
+    "node_id": "LA_kwDOAAAAB87NZw7p",
+    "url": "https://api.github.com/repos/cvut-team/pm-assistant/labels/bug",
+    "name": "bug",
+    "color": "d73a4a",
+    "default": true,
+    "description": "Something isn't working"
+  },
+  {
+    "id": 5500002,
+    "name": "area: backend",
+    "color": "0e8a16",
+    "default": false,
+    "description": null
+  },
+  {
+    "id": 5500003,
+    "name": "priority: high",
+    "color": "b60205",
+    "default": false,
+    "description": "Needs attention this sprint"
+  }
+]

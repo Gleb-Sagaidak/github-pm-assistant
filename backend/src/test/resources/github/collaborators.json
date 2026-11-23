@@ -1,0 +1,20 @@
+[
+  {
+    "login": "alice",
+    "id": 888,
+    "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4",
+    "type": "User",
+    "site_admin": false,
+    "permissions": { "pull": true, "triage": true, "push": true, "maintain": true, "admin": true },
+    "role_name": "admin"
+  },
+  {
+    "login": "bob",
+    "id": 889,
+    "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4",
+    "type": "User",
+    "site_admin": false,
+    "permissions": { "pull": true, "triage": true, "push": true, "maintain": false, "admin": false },
+    "role_name": "write"
+  }
+]

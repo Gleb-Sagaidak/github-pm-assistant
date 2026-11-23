@@ -1,0 +1,60 @@
+[
+  {
+    "id": 9000001,
+    "node_id": "LE_lADOAAAAB87NZw7pzwAAAAJA",
+    "event": "labeled",
+    "actor": { "login": "alice", "id": 888, "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4" },
+    "commit_id": null,
+    "created_at": "2026-11-01T10:05:00Z",
+    "label": { "name": "bug", "color": "d73a4a" }
+  },
+  {
+    "id": 9000002,
+    "event": "assigned",
+    "actor": { "login": "alice", "id": 888, "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4" },
+    "created_at": "2026-11-01T10:06:00Z",
+    "assignee": { "login": "bob", "id": 889, "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4" }
+  },
+  {
+    "event": "cross-referenced",
+    "actor": { "login": "bob", "id": 889, "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4" },
+    "created_at": "2026-11-06T09:00:00Z",
+    "updated_at": "2026-11-06T09:00:00Z",
+    "source": {
+      "type": "issue",
+      "issue": {
+        "id": 1000000008,
+        "number": 8,
+        "title": "Fix session refresh",
+        "state": "open",
+        "repository_url": "https://api.github.com/repos/cvut-team/pm-assistant",
+        "html_url": "https://github.com/cvut-team/pm-assistant/pull/8",
+        "pull_request": { "url": "https://api.github.com/repos/cvut-team/pm-assistant/pulls/8" }
+      }
+    }
+  },
+  {
+    "id": 4000001,
+    "event": "commented",
+    "actor": { "login": "bob", "id": 889, "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4" },
+    "user": { "login": "bob", "id": 889, "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4" },
+    "created_at": "2026-11-02T08:00:00Z",
+    "updated_at": "2026-11-02T08:05:00Z",
+    "body": "Reproduced on main.",
+    "author_association": "MEMBER"
+  },
+  {
+    "sha": "6dcb09b5b57875f334f61aebed695e2e4193db5e",
+    "event": "committed",
+    "author": { "name": "Bob", "email": "bob@example.com", "date": "2026-11-06T10:00:00Z" },
+    "committer": { "name": "Bob", "email": "bob@example.com", "date": "2026-11-06T10:00:00Z" },
+    "message": "Refresh session early"
+  },
+  {
+    "id": 9000009,
+    "event": "reviewed",
+    "user": { "login": "alice", "id": 888, "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4" },
+    "state": "approved",
+    "submitted_at": "2026-11-07T12:00:00Z"
+  }
+]

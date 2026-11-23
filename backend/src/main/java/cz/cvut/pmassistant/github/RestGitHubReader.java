@@ -53,17 +53,17 @@ public class RestGitHubReader implements GitHubReader {
 
 	@Override
 	public List<TimelineEvent> getTimeline(RepoRef repo, int issueNumber) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return http.getAll(repoPath(repo) + "/issues/" + issueNumber + "/timeline", TimelineEvent.class);
 	}
 
 	@Override
 	public List<Label> listLabels(RepoRef repo) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return http.getAll(repoPath(repo) + "/labels", Label.class);
 	}
 
 	@Override
 	public List<User> listCollaborators(RepoRef repo) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return http.getAll(repoPath(repo) + "/collaborators", User.class);
 	}
 
 	@Override
