@@ -19,6 +19,7 @@ import org.springframework.core.ResolvableType;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.util.StreamUtils;
@@ -41,7 +42,7 @@ public class GitHubHttp {
 	static final Duration READ_TIMEOUT = Duration.ofSeconds(30);
 
 	/** Default cap on pages per listing: 100 pages of 100 items. */
-	static final int DEFAULT_MAX_PAGES = 100;
+	public static final int DEFAULT_MAX_PAGES = 100;
 	static final int PER_PAGE = 100;
 
 	private static final int MAX_MESSAGE_LENGTH = 300;
@@ -69,12 +70,34 @@ public class GitHubHttp {
 	 */
 	public GitHubHttp(String baseUrl, String apiVersion, BearerTokenSource tokens, Clock clock,
 			RetryExecutor retry, int maxPages) {
+		this(baseUrl, apiVersion, tokens, clock, retry, maxPages, newRequestFactory());
+	}
+
+	/**
+	 * @param requestFactory the transport; clients that serve the same GitHub host can share one made by
+	 *                       {@link #newRequestFactory()} instead of each opening its own connections
+	 */
+	public GitHubHttp(String baseUrl, String apiVersion, BearerTokenSource tokens, Clock clock,
+			RetryExecutor retry, int maxPages, ClientHttpRequestFactory requestFactory) {
 		this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
 		this.baseUri = URI.create(this.baseUrl);
 		this.maxPages = maxPages;
 		this.tokens = tokens;
 		this.clock = clock;
 		this.retry = retry;
+		this.client = RestClient.builder()
+				.requestFactory(requestFactory)
+				.defaultHeader(HttpHeaders.ACCEPT, "application/vnd.github+json")
+				.defaultHeader("X-GitHub-Api-Version", apiVersion)
+				.defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
+				.build();
+	}
+
+	/**
+	 * A transport with the timeouts we want: HTTP/1.1, no redirects (the token must not follow a redirect to
+	 * another host), 10 s to connect and 30 s to read.
+	 */
+	public static ClientHttpRequestFactory newRequestFactory() {
 		HttpClient httpClient = HttpClient.newBuilder()
 				.version(HttpClient.Version.HTTP_1_1)
 				.connectTimeout(CONNECT_TIMEOUT)
@@ -82,12 +105,7 @@ public class GitHubHttp {
 				.build();
 		JdkClientHttpRequestFactory requestFactory = new JdkClientHttpRequestFactory(httpClient);
 		requestFactory.setReadTimeout(READ_TIMEOUT);
-		this.client = RestClient.builder()
-				.requestFactory(requestFactory)
-				.defaultHeader(HttpHeaders.ACCEPT, "application/vnd.github+json")
-				.defaultHeader("X-GitHub-Api-Version", apiVersion)
-				.defaultHeader(HttpHeaders.USER_AGENT, USER_AGENT)
-				.build();
+		return requestFactory;
 	}
 
 	public <T> T get(String path, Class<T> type) {
