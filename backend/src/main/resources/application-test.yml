@@ -8,4 +8,5 @@ app:
     client-id: test-client-id
     client-secret: test-client-secret
   llm:
-    api-key: test-api-key
+    base-url: http://localhost:11434/v1
+    model: test-model

@@ -35,8 +35,8 @@ class GitHubConfigTest {
 						"app.github.client-id=Iv1.test",
 						"app.github.client-secret=secret",
 						"app.github.api-version=2026-03-10",
-						"app.llm.api-key=key",
-						"app.llm.model=claude-opus-5-5",
+						"app.llm.base-url=http://localhost:11434/v1",
+						"app.llm.model=test-model",
 						"app.defaults.daily-token-quota=500000");
 	}
 

@@ -30,8 +30,9 @@ app:
     webhook-secret: ${GITHUB_WEBHOOK_SECRET:}     # этап 8
     api-version: "2026-03-10"
   llm:
-    api-key: ${ANTHROPIC_API_KEY}
-    model: claude-opus-5-5
+    base-url: ${LLM_BASE_URL:https://api.openai.com/v1}   # any OpenAI-compatible server, e.g. http://localhost:11434/v1
+    api-key: ${LLM_API_KEY:}                              # empty for servers that need none
+    model: ${LLM_MODEL}
   defaults:                                       # переопределяются на workspace
     daily-token-quota: 500000
 

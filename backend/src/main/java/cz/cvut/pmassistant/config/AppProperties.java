@@ -27,8 +27,13 @@ public record AppProperties(
             @Required String apiVersion) {
     }
 
+    /**
+     * The language-model endpoint. It speaks the OpenAI chat-completions protocol (OpenAI itself, or a local
+     * server such as Ollama). The API key is optional: local servers need none.
+     */
     public record Llm(
-            @Required String apiKey,
+            @Required String baseUrl,
+            String apiKey,
             @Required String model) {
     }
 
