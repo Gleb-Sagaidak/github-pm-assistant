@@ -1,0 +1,30 @@
+{
+  "data": {
+    "organization": {
+      "projectV2": {
+        "items": {
+          "pageInfo": { "hasNextPage": false, "endCursor": "CUR2" },
+          "nodes": [
+            {
+              "id": "PVTI_5",
+              "content": {
+                "__typename": "Issue",
+                "number": 3,
+                "title": "Deploy to staging",
+                "state": "OPEN",
+                "updatedAt": "2026-11-10T08:00:00Z",
+                "repository": { "nameWithOwner": "cvut-team/infrastructure" }
+              },
+              "fieldValues": { "nodes": [] }
+            },
+            {
+              "id": "PVTI_6",
+              "content": null,
+              "fieldValues": { "nodes": [] }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

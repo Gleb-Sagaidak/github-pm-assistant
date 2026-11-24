@@ -1,0 +1,14 @@
+{
+  "data": {
+    "organization": {
+      "projectsV2": {
+        "pageInfo": { "hasNextPage": false, "endCursor": "Y3Vyc29yOnYyOpHOAAAB" },
+        "nodes": [
+          { "id": "PVT_kwDOAAAAB84AAAAB", "number": 1, "title": "Sprint board", "closed": false },
+          { "id": "PVT_kwDOAAAAB84AAAAC", "number": 2, "title": "Archive 2025", "closed": true },
+          { "id": "PVT_kwDOAAAAB84AAAAD", "number": 3, "title": "Roadmap", "closed": false }
+        ]
+      }
+    }
+  }
+}

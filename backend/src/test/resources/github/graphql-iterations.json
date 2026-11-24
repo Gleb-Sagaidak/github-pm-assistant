@@ -1,0 +1,27 @@
+{
+  "data": {
+    "organization": {
+      "projectV2": {
+        "fields": {
+          "nodes": [
+            { "__typename": "ProjectV2Field" },
+            { "__typename": "ProjectV2SingleSelectField" },
+            {
+              "__typename": "ProjectV2IterationField",
+              "name": "Iteration",
+              "configuration": {
+                "iterations": [
+                  { "id": "it-3", "title": "Sprint 3", "startDate": "2026-11-23", "duration": 14 },
+                  { "id": "it-2", "title": "Sprint 2", "startDate": "2026-11-09", "duration": 14 }
+                ],
+                "completedIterations": [
+                  { "id": "it-1", "title": "Sprint 1", "startDate": "2026-10-26", "duration": 14 }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

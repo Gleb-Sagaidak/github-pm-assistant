@@ -1,0 +1,14 @@
+{
+  "data": {
+    "organization": {
+      "projectV2": {
+        "fields": {
+          "nodes": [
+            { "__typename": "ProjectV2Field" },
+            { "__typename": "ProjectV2SingleSelectField" }
+          ]
+        }
+      }
+    }
+  }
+}

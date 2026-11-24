@@ -1,0 +1,74 @@
+{
+  "data": {
+    "organization": {
+      "projectV2": {
+        "items": {
+          "pageInfo": { "hasNextPage": true, "endCursor": "CUR1" },
+          "nodes": [
+            {
+              "id": "PVTI_1",
+              "content": {
+                "__typename": "Issue",
+                "number": 7,
+                "title": "Login fails with expired session",
+                "state": "OPEN",
+                "updatedAt": "2026-11-05T14:30:00Z",
+                "repository": { "nameWithOwner": "cvut-team/pm-assistant" }
+              },
+              "fieldValues": {
+                "nodes": [
+                  { "__typename": "ProjectV2ItemFieldTextValue" },
+                  {
+                    "__typename": "ProjectV2ItemFieldSingleSelectValue",
+                    "name": "High",
+                    "field": { "name": "Priority" }
+                  },
+                  {
+                    "__typename": "ProjectV2ItemFieldSingleSelectValue",
+                    "name": "In progress",
+                    "field": { "name": "Status" }
+                  },
+                  {
+                    "__typename": "ProjectV2ItemFieldIterationValue",
+                    "iterationId": "it-2",
+                    "field": { "name": "Iteration" }
+                  }
+                ]
+              }
+            },
+            {
+              "id": "PVTI_2",
+              "content": { "__typename": "PullRequest" },
+              "fieldValues": { "nodes": [] }
+            },
+            {
+              "id": "PVTI_3",
+              "content": { "__typename": "DraftIssue" },
+              "fieldValues": { "nodes": [] }
+            },
+            {
+              "id": "PVTI_4",
+              "content": {
+                "__typename": "Issue",
+                "number": 9,
+                "title": "Add dark mode",
+                "state": "CLOSED",
+                "updatedAt": "2026-11-09T16:00:00Z",
+                "repository": { "nameWithOwner": "cvut-team/pm-assistant" }
+              },
+              "fieldValues": {
+                "nodes": [
+                  {
+                    "__typename": "ProjectV2ItemFieldSingleSelectValue",
+                    "name": "Done",
+                    "field": { "name": "Status" }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
