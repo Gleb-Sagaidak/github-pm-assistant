@@ -1,0 +1,11 @@
+{
+  "permission": "admin",
+  "role_name": "admin",
+  "user": {
+    "login": "alice",
+    "id": 888,
+    "avatar_url": "https://avatars.githubusercontent.com/u/888?v=4",
+    "permissions": { "pull": true, "triage": true, "push": true, "maintain": true, "admin": true },
+    "role_name": "admin"
+  }
+}

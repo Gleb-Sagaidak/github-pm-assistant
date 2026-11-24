@@ -1,0 +1,11 @@
+{
+  "permission": "read",
+  "role_name": "triage",
+  "user": {
+    "login": "bob",
+    "id": 889,
+    "avatar_url": "https://avatars.githubusercontent.com/u/889?v=4",
+    "permissions": { "pull": true, "triage": true, "push": false, "maintain": false, "admin": false },
+    "role_name": "triage"
+  }
+}

@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.regex.Pattern;
 
 import cz.cvut.pmassistant.github.http.GitHubHttp;
+import cz.cvut.pmassistant.github.model.CollaboratorPermission;
 import cz.cvut.pmassistant.github.model.Comment;
 import cz.cvut.pmassistant.github.model.Issue;
 import cz.cvut.pmassistant.github.model.IssueLink;
@@ -64,6 +65,14 @@ public class RestGitHubReader implements GitHubReader {
 	@Override
 	public List<User> listCollaborators(RepoRef repo) {
 		return http.getAll(repoPath(repo) + "/collaborators", User.class);
+	}
+
+	@Override
+	public CollaboratorPermission getCollaboratorPermission(RepoRef repo, String login) {
+		if (login == null || !SAFE_NAME.matcher(login).matches()) {
+			throw new IllegalArgumentException("Unsafe user login: " + login);
+		}
+		return http.get(repoPath(repo) + "/collaborators/" + login + "/permission", CollaboratorPermission.class);
 	}
 
 	@Override

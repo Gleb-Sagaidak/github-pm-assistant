@@ -1,0 +1,14 @@
+{
+  "total_count": 3,
+  "repository_selection": "selected",
+  "repositories": [
+    {
+      "id": 4244,
+      "name": "docs",
+      "full_name": "cvut-team/docs",
+      "private": true,
+      "owner": { "login": "cvut-team", "id": 777, "avatar_url": "https://avatars.githubusercontent.com/u/777?v=4" },
+      "permissions": { "admin": false, "push": false, "pull": true }
+    }
+  ]
+}

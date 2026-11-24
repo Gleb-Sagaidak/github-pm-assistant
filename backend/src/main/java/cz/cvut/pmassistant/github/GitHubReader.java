@@ -3,6 +3,7 @@ package cz.cvut.pmassistant.github;
 import java.time.Instant;
 import java.util.List;
 
+import cz.cvut.pmassistant.github.model.CollaboratorPermission;
 import cz.cvut.pmassistant.github.model.Comment;
 import cz.cvut.pmassistant.github.model.Issue;
 import cz.cvut.pmassistant.github.model.IssueLink;
@@ -37,6 +38,12 @@ public interface GitHubReader {
 	List<Label> listLabels(RepoRef repo);
 
 	List<User> listCollaborators(RepoRef repo);
+
+	/**
+	 * The permission of a user on the repository, as GitHub knows it now. Asked with the installation token
+	 * (not the user's), for the second check when a proposal is approved.
+	 */
+	CollaboratorPermission getCollaboratorPermission(RepoRef repo, String login);
 
 	/** Issues that block the given one. */
 	List<IssueLink> listBlockedBy(RepoRef repo, int issueNumber);

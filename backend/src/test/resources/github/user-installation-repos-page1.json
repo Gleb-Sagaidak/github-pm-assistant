@@ -1,0 +1,22 @@
+{
+  "total_count": 3,
+  "repository_selection": "selected",
+  "repositories": [
+    {
+      "id": 4242,
+      "name": "pm-assistant",
+      "full_name": "cvut-team/pm-assistant",
+      "private": false,
+      "owner": { "login": "cvut-team", "id": 777, "avatar_url": "https://avatars.githubusercontent.com/u/777?v=4" },
+      "permissions": { "admin": true, "maintain": true, "push": true, "triage": true, "pull": true }
+    },
+    {
+      "id": 4243,
+      "name": "infrastructure",
+      "full_name": "cvut-team/infrastructure",
+      "private": true,
+      "owner": { "login": "cvut-team", "id": 777, "avatar_url": "https://avatars.githubusercontent.com/u/777?v=4" },
+      "permissions": { "admin": false, "maintain": false, "push": true, "triage": true, "pull": true }
+    }
+  ]
+}

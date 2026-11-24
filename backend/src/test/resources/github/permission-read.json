@@ -1,0 +1,11 @@
+{
+  "permission": "read",
+  "role_name": "read",
+  "user": {
+    "login": "dave",
+    "id": 891,
+    "avatar_url": "https://avatars.githubusercontent.com/u/891?v=4",
+    "permissions": { "pull": true, "triage": false, "push": false, "maintain": false, "admin": false },
+    "role_name": "read"
+  }
+}
