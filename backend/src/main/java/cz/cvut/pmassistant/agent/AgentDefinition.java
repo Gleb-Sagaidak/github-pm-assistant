@@ -28,6 +28,8 @@ public record AgentDefinition(String name, String systemPrompt, List<Tool> tools
 			throw new IllegalArgumentException("The terminal tool name is also used by a read tool: "
 					+ terminalTool.name());
 		}
+		// The final answer is validated against this schema, so a schema that cannot be used must fail here.
+		new ArgumentValidator(terminalTool.inputSchema());
 	}
 
 	public ToolRegistry registry() {

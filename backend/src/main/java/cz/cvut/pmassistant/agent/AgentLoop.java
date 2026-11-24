@@ -57,8 +57,10 @@ public class AgentLoop {
 		private int seq;
 		private int llmSteps;
 		private int reminders;
+		private int invalidFinalAnswers;
 		private final int repeatedCalls = 0;
 		private final Instant startedAt;
+		private final ArgumentValidator finalAnswerValidator;
 
 		Execution(AgentRunRequest request, RunContext context) {
 			this.request = request;
@@ -68,6 +70,7 @@ public class AgentLoop {
 			this.registry = agent.registry();
 			this.specs = agent.allSpecs();
 			this.startedAt = context.clock().instant();
+			this.finalAnswerValidator = new ArgumentValidator(agent.terminalTool().inputSchema());
 		}
 
 		AgentRunResult execute() {
@@ -157,11 +160,40 @@ public class AgentLoop {
 			List<ContentPart.ToolResult> results = new ArrayList<>();
 			for (ContentPart.ToolCall call : calls) {
 				if (call.name().equals(agent.terminalTool().name())) {
-					return Optional.of(new AgentRunResult.Completed(call.arguments()));
+					Optional<AgentRunResult> ended = handleFinalAnswer(call, results);
+					if (ended.isPresent()) {
+						return ended;
+					}
+					continue;
 				}
 				results.add(runReadTool(call));
 			}
 			messages.add(LlmMessage.toolResults(results));
+			return Optional.empty();
+		}
+
+		/**
+		 * The terminal call ends the run if its arguments match the schema. If not, the model is told what is
+		 * wrong and gets one more chance (the first line of the NFR7 defence); a second invalid answer fails
+		 * the run.
+		 */
+		private Optional<AgentRunResult> handleFinalAnswer(ContentPart.ToolCall call,
+				List<ContentPart.ToolResult> results) {
+			List<String> problems = finalAnswerValidator.validate(call.arguments());
+			if (problems.isEmpty()) {
+				return Optional.of(new AgentRunResult.Completed(call.arguments()));
+			}
+			invalidFinalAnswers++;
+			String description = String.join("; ", problems);
+			String message = "The arguments of " + call.name() + " do not match its schema: " + description
+					+ ". Call the tool again with corrected arguments.";
+			recorder.toolStep(context.runId(), new AgentRunRecorder.ToolStep(++seq, call.name(), call.arguments(),
+					message, true, Duration.ZERO));
+			if (invalidFinalAnswers >= 2) {
+				return Optional.of(fail(FailureReason.INVALID_FINAL_ANSWER,
+						"The final answer was invalid twice: " + description));
+			}
+			results.add(new ContentPart.ToolResult(call.id(), message, true));
 			return Optional.empty();
 		}
 
