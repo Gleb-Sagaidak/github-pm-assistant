@@ -58,6 +58,7 @@ public class AgentLoop {
 		private int llmSteps;
 		private int reminders;
 		private final int repeatedCalls = 0;
+		private final Instant startedAt;
 
 		Execution(AgentRunRequest request, RunContext context) {
 			this.request = request;
@@ -66,6 +67,7 @@ public class AgentLoop {
 			this.limits = agent.limits();
 			this.registry = agent.registry();
 			this.specs = agent.allSpecs();
+			this.startedAt = context.clock().instant();
 		}
 
 		AgentRunResult execute() {
@@ -87,6 +89,11 @@ public class AgentLoop {
 
 		private AgentRunResult loop() {
 			for (int step = 1; step <= limits.maxSteps(); step++) {
+				Duration elapsed = Duration.between(startedAt, now());
+				if (elapsed.compareTo(limits.maxDuration()) > 0) {
+					return fail(FailureReason.TIME_LIMIT, "The run took " + elapsed.toSeconds()
+							+ " s, the limit is " + limits.maxDuration().toSeconds() + " s");
+				}
 				Instant callStarted = now();
 				LlmResponse response;
 				try {
@@ -101,6 +108,11 @@ public class AgentLoop {
 						Duration.between(callStarted, now()), response.text()));
 				messages.add(assistantMessage(response));
 
+				// Checked before anything the response asks for is done: a run over budget stops here.
+				if (usage.totalTokens() > limits.maxTotalTokens()) {
+					return fail(FailureReason.TOKEN_LIMIT, "The run used " + usage.totalTokens()
+							+ " tokens, the limit is " + limits.maxTotalTokens());
+				}
 				if (response.stopReason() == StopReason.REFUSAL) {
 					return fail(FailureReason.REFUSAL, "The model declined to answer");
 				}
