@@ -3,8 +3,16 @@ package cz.cvut.pmassistant.agent;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import cz.cvut.pmassistant.llm.LlmClient;
 import cz.cvut.pmassistant.llm.LlmUnavailableException;
@@ -27,8 +35,13 @@ import tools.jackson.databind.JsonNode;
  */
 public class AgentLoop {
 
+	/** The same tool with the same arguments may be answered twice; the third time is refused. */
+	private static final int MAX_IDENTICAL_CALLS = 2;
+
 	private final LlmClient llm;
 	private final AgentRunRecorder recorder;
+	/** Tools run on virtual threads so that a stuck one can be abandoned after its timeout. */
+	private final ExecutorService toolExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
 	public AgentLoop(LlmClient llm, AgentRunRecorder recorder) {
 		this.llm = llm;
@@ -58,7 +71,8 @@ public class AgentLoop {
 		private int llmSteps;
 		private int reminders;
 		private int invalidFinalAnswers;
-		private final int repeatedCalls = 0;
+		private int repeatedCalls;
+		private final Map<String, Integer> callCounts = new HashMap<>();
 		private final Instant startedAt;
 		private final ArgumentValidator finalAnswerValidator;
 
@@ -206,6 +220,11 @@ public class AgentLoop {
 						+ String.join(", ", registry.specs().stream().map(ToolSpec::name).toList())
 						+ ", " + agent.terminalTool().name());
 			}
+			else if (isRepeat(call)) {
+				repeatedCalls++;
+				outcome = ToolOutcome.error("You already called " + call.name() + " with these arguments and got "
+						+ "the result. Use that earlier result instead of asking again.");
+			}
 			else {
 				outcome = execute(tool.get(), call.arguments());
 			}
@@ -214,14 +233,43 @@ public class AgentLoop {
 			return new ContentPart.ToolResult(call.id(), outcome.content(), outcome.isError());
 		}
 
-		/** A tool that throws does not fail the run: the model is told, and may do without it. */
+		/**
+		 * A model that calls the same tool with the same arguments again and again is going in circles (a known
+		 * failure of the ReAct pattern). The call is counted and, from the third time, refused.
+		 */
+		private boolean isRepeat(ContentPart.ToolCall call) {
+			int times = callCounts.merge(call.name() + CanonicalJson.of(call.arguments()), 1, Integer::sum);
+			return times > MAX_IDENTICAL_CALLS;
+		}
+
+		/**
+		 * Runs a tool with a time limit. A tool that fails, throws or hangs does not fail the run: the model is
+		 * told, and may do without it. A tool that ignores the interrupt keeps running in the background, but
+		 * nothing waits for it.
+		 */
 		private ToolOutcome execute(Tool tool, JsonNode arguments) {
+			Future<ToolOutcome> future = toolExecutor.submit(() -> tool.execute(arguments, context));
 			try {
-				return tool.execute(arguments, context);
+				ToolOutcome outcome = future.get(limits.toolTimeout().toMillis(), TimeUnit.MILLISECONDS);
+				return outcome != null ? outcome : ToolOutcome.error("Tool " + tool.name() + " returned nothing");
 			}
-			catch (RuntimeException e) {
-				return ToolOutcome.error("Tool " + tool.name() + " failed: " + e.getClass().getSimpleName() + ": "
-						+ e.getMessage());
+			catch (TimeoutException e) {
+				future.cancel(true);
+				return ToolOutcome.error("Tool " + tool.name() + " timed out after "
+						+ limits.toolTimeout().toMillis() + " ms");
+			}
+			catch (ExecutionException e) {
+				if (e.getCause() instanceof Error error) {
+					throw error;
+				}
+				Throwable cause = e.getCause();
+				return ToolOutcome.error("Tool " + tool.name() + " failed: " + cause.getClass().getSimpleName() + ": "
+						+ cause.getMessage());
+			}
+			catch (InterruptedException e) {
+				future.cancel(true);
+				Thread.currentThread().interrupt();
+				throw new IllegalStateException("Interrupted while waiting for tool " + tool.name(), e);
 			}
 		}
 
