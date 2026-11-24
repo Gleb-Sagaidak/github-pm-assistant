@@ -286,8 +286,8 @@ public class AgentLoop {
 		}
 
 		private void finish(AgentRunResult result) {
-			recorder.finished(context.runId(),
-					new AgentRunRecorder.RunFinish(now(), result, llmSteps, usage, repeatedCalls));
+			recorder.finished(context.runId(), new AgentRunRecorder.RunFinish(context.workspace().workspaceId(), now(),
+					result, llmSteps, usage, repeatedCalls));
 		}
 
 		private Instant now() {

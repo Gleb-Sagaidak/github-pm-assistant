@@ -64,10 +64,12 @@ public interface AgentRunRecorder {
 	}
 
 	/**
+	 * @param workspaceId   the workspace of the run, so storage can find the run under the workspace rule
 	 * @param llmSteps      how many times the model was called
 	 * @param usage         tokens over the whole run
 	 * @param repeatedCalls how many tool calls were refused as repeats (a metric of the "going in circles" failure)
 	 */
-	record RunFinish(Instant finishedAt, AgentRunResult result, int llmSteps, Usage usage, int repeatedCalls) {
+	record RunFinish(UUID workspaceId, Instant finishedAt, AgentRunResult result, int llmSteps, Usage usage,
+			int repeatedCalls) {
 	}
 }
