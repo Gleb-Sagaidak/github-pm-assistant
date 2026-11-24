@@ -1,4 +1,4 @@
-package cz.cvut.pmassistant.github;
+package cz.cvut.pmassistant;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,13 +11,13 @@ import java.util.Map;
  * Settings for the live smoke test, taken from environment variables, or from {@code KEY=VALUE} lines of the
  * {@code .env} file in the repository root (never committed) when a variable is not set.
  */
-final class LiveConfig {
+public final class LiveConfig {
 
 	private static final List<Path> ENV_FILES = List.of(Path.of("../.env"), Path.of(".env"));
 
 	private final Map<String, String> fileValues = new HashMap<>();
 
-	LiveConfig() {
+	public LiveConfig() {
 		for (Path file : ENV_FILES) {
 			if (Files.isRegularFile(file)) {
 				readFile(file);
@@ -26,7 +26,7 @@ final class LiveConfig {
 	}
 
 	/** The value, or null if it is set neither in the environment nor in a {@code .env} file. */
-	String get(String name) {
+	public String get(String name) {
 		String fromEnvironment = System.getenv(name);
 		if (fromEnvironment != null && !fromEnvironment.isBlank()) {
 			return fromEnvironment;
@@ -34,7 +34,7 @@ final class LiveConfig {
 		return fileValues.get(name);
 	}
 
-	String require(String name) {
+	public String require(String name) {
 		String value = get(name);
 		if (value == null) {
 			throw new IllegalStateException("Live smoke test needs " + name + " (environment variable or .env)");
@@ -43,7 +43,7 @@ final class LiveConfig {
 	}
 
 	/** A path from the settings; relative paths are tried as given and then from the repository root. */
-	Path path(String name) {
+	public Path path(String name) {
 		Path path = Path.of(require(name));
 		if (!Files.exists(path) && Files.exists(Path.of("..").resolve(path))) {
 			return Path.of("..").resolve(path);

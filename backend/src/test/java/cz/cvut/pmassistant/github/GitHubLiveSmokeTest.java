@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
+import cz.cvut.pmassistant.LiveConfig;
 import cz.cvut.pmassistant.github.auth.AppJwtFactory;
 import cz.cvut.pmassistant.github.http.RetryExecutor;
 import cz.cvut.pmassistant.github.model.Comment;
