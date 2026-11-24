@@ -1,0 +1,23 @@
+{
+  "id": "chatcmpl-9fA2",
+  "object": "chat.completion",
+  "model": "gpt-test",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": null,
+        "tool_calls": [
+          {
+            "id": "call_abc123",
+            "type": "function",
+            "function": { "name": "get_issue", "arguments": "{\"number\": 7, \"repo\": \"cvut-team/pm-assistant\"}" }
+          }
+        ]
+      },
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "usage": { "prompt_tokens": 200, "completion_tokens": 30, "total_tokens": 230 }
+}

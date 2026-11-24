@@ -1,0 +1,28 @@
+{
+  "id": "chatcmpl-9fA3",
+  "object": "chat.completion",
+  "model": "gpt-test",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "I will read the issue and the labels.",
+        "tool_calls": [
+          {
+            "id": "call_1",
+            "type": "function",
+            "function": { "name": "get_issue", "arguments": "{\"number\":7}" }
+          },
+          {
+            "id": "call_2",
+            "type": "function",
+            "function": { "name": "list_labels", "arguments": "{}" }
+          }
+        ]
+      },
+      "finish_reason": "tool_calls"
+    }
+  ],
+  "usage": { "prompt_tokens": 210, "completion_tokens": 40, "total_tokens": 250 }
+}

@@ -46,6 +46,18 @@ class ArchitectureTest {
 			.allowEmptyShould(true);
 
 	@ArchTest
+	static final ArchRule agentsOnlyKnowTheLlmPortNotItsAdapters = noClasses()
+			.that().resideInAnyPackage("..agent..", "..proposal..")
+			.should().dependOnClassesThat().resideInAnyPackage("cz.cvut.pmassistant.llm.openai..")
+			.allowEmptyShould(true);
+
+	@ArchTest
+	static final ArchRule theLlmPackageDoesNotKnowTheRestOfTheApplication = noClasses()
+			.that().resideInAPackage("cz.cvut.pmassistant.llm..")
+			.should().dependOnClassesThat().resideInAnyPackage("cz.cvut.pmassistant.agent..",
+					"cz.cvut.pmassistant.github..", "cz.cvut.pmassistant.proposal..", "cz.cvut.pmassistant.tenant..");
+
+	@ArchTest
 	static final ArchRule theLlmModelIsPlainJava = noClasses()
 			.that().resideInAPackage("cz.cvut.pmassistant.llm.model..")
 			.should().dependOnClassesThat().resideInAnyPackage("org.springframework..", "jakarta.persistence..",
