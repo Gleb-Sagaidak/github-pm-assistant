@@ -1,4 +1,4 @@
-package cz.cvut.pmassistant.llm.openai;
+package cz.cvut.pmassistant.llm.gateway;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
@@ -14,6 +14,8 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.openai.OpenAiChatModel;
+import org.springframework.ai.openai.OpenAiChatOptions;
 
 import cz.cvut.pmassistant.LiveConfig;
 import cz.cvut.pmassistant.agent.AgentDefinition;
@@ -36,15 +38,16 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
 
 /**
- * Manual check against a real model: one plain question, and one agent run in which the model has to call a toy
- * tool and then the terminal tool. It costs a few hundred tokens. It is NOT part of the normal build (tag
- * {@code live}); run it with
+ * Manual check against a real model through Spring AI: one plain question, and one agent run in which the model has
+ * to call a toy tool and then the terminal tool. It costs a few hundred tokens. It is NOT part of the normal build
+ * (tag {@code live}); run it with
  *
  * <pre>
- * ./mvnw test -Plive -Dtest=OpenAiLiveSmokeTest
+ * ./mvnw test -Plive -Dtest=LlmLiveSmokeTest
  * </pre>
  *
- * Settings come from environment variables or the repository's {@code .env} file:
+ * Settings come from environment variables or the repository's {@code .env} file, the same ones the application
+ * uses:
  * <ul>
  * <li>{@code LLM_MODEL}: the model name (without it the test is skipped);</li>
  * <li>{@code LLM_BASE_URL}: default {@code https://api.openai.com/v1}; for Ollama
@@ -55,23 +58,31 @@ import tools.jackson.databind.json.JsonMapper;
  * </ul>
  */
 @Tag("live")
-class OpenAiLiveSmokeTest {
+class LlmLiveSmokeTest {
 
 	private static final JsonMapper JSON = JsonMapper.builder().build();
 
-	private static OpenAiCompatibleLlmClient client;
+	private static GatewayLlmClient client;
 
 	@BeforeAll
 	static void connect() {
 		LiveConfig config = new LiveConfig();
 		assumeTrue(config.get("LLM_MODEL") != null, "LLM_MODEL is not set: live LLM test skipped");
 		String baseUrl = config.get("LLM_BASE_URL") != null ? config.get("LLM_BASE_URL") : "https://api.openai.com/v1";
-		String parameter = config.get("APP_LLM_MAX_TOKENS_PARAMETER") != null
-				? config.get("APP_LLM_MAX_TOKENS_PARAMETER") : OpenAiCompatibleSettings.DEFAULT_MAX_TOKENS_PARAMETER;
-		OpenAiCompatibleSettings settings = new OpenAiCompatibleSettings(baseUrl, config.get("LLM_API_KEY"),
-				config.require("LLM_MODEL"), parameter, Duration.ofSeconds(120), 2);
-		System.out.println("[live] " + settings);
-		client = new OpenAiCompatibleLlmClient(settings);
+		String model = config.require("LLM_MODEL");
+		boolean completionTokens = "max_completion_tokens".equals(config.get("APP_LLM_MAX_TOKENS_PARAMETER"));
+		System.out.println("[live] base URL " + baseUrl + ", model " + model + ", key "
+				+ (config.get("LLM_API_KEY") == null ? "<none>" : "<set>") + ", limit field "
+				+ (completionTokens ? "max_completion_tokens" : "max_tokens"));
+		OpenAiChatModel chatModel = OpenAiChatModel.builder().options(OpenAiChatOptions.builder()
+				.baseUrl(baseUrl)
+				.apiKey(config.get("LLM_API_KEY") == null ? "" : config.get("LLM_API_KEY"))
+				.model(model)
+				.timeout(Duration.ofSeconds(120))
+				.maxRetries(2)
+				.build()).build();
+		client = new GatewayLlmClient(chatModel, model, new OpenAiErrorClassifier(),
+				completionTokens ? OutputLimit.maxCompletionTokens() : OutputLimit.maxTokens());
 	}
 
 	@Test

@@ -1,4 +1,4 @@
 /**
- * Оценка качества агентов (этап 7).
+ * Agent quality evaluation.
  */
 package cz.cvut.pmassistant.eval;

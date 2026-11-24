@@ -1,4 +1,4 @@
 /**
- * Клиент LLM и работа с промптами.
+ * LLM client and prompt handling.
  */
 package cz.cvut.pmassistant.llm;

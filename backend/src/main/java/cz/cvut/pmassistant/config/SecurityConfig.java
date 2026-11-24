@@ -8,8 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Каркасная конфигурация: health открыт, всё остальное требует входа через GitHub.
- * Полноценная авторизация по workspace — этап 1.5.
+ * Skeleton configuration: the health endpoint is open, everything else requires a GitHub login.
+ * Per-workspace authorization is added later.
  */
 @Configuration(proxyBeanMethods = false)
 @EnableWebSecurity

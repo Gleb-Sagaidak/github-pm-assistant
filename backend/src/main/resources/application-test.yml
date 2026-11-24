@@ -1,5 +1,5 @@
-# Профиль test: датасорс поднимает Testcontainers (@ServiceConnection), секреты — заглушки.
-# Реальных значений здесь быть не должно.
+# Profile test: the datasource is provided by Testcontainers (@ServiceConnection); secrets are dummies.
+# No real values belong here.
 app:
   github:
     app-id: "0"

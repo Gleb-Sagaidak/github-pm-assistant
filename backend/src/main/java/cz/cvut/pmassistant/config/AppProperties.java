@@ -7,8 +7,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 /**
- * Типизированная конфигурация приложения (префикс {@code app}).
- * Обязательные значения без дефолтов: приложение не стартует, если они не заданы.
+ * Typed application configuration (prefix {@code app}).
+ * Required values have no defaults: the application refuses to start if any is missing.
  */
 @ConfigurationProperties(prefix = "app")
 @Validated
@@ -37,7 +37,7 @@ public record AppProperties(
             @Required String model) {
     }
 
-    /** Значения по умолчанию; workspace может их переопределить (этап 1.5). */
+    /** Defaults that a workspace can override later. */
     public record Defaults(@Positive long dailyTokenQuota) {
     }
 }

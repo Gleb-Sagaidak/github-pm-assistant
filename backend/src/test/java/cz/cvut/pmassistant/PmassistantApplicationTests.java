@@ -13,7 +13,7 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
-/** Контекст поднимается с настоящим Postgres (Testcontainers), миграции Flyway применяются, health = UP. */
+/** The context starts against a real Postgres (Testcontainers), Flyway migrations are applied, health is UP. */
 @Import(TestcontainersConfiguration.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")

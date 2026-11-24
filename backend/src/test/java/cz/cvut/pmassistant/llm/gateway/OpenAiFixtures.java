@@ -1,4 +1,4 @@
-package cz.cvut.pmassistant.llm.openai;
+package cz.cvut.pmassistant.llm.gateway;
 
 import java.io.IOException;
 import java.io.InputStream;

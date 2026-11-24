@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 import org.springframework.context.annotation.Configuration;
 
-/** Приложение не должно стартовать без обязательных значений (NFR13: секреты только из окружения). */
+/** The application must not start without required values (secrets come from the environment only). */
 class AppPropertiesTest {
 
 	@Configuration(proxyBeanMethods = false)
@@ -79,7 +79,7 @@ class AppPropertiesTest {
 				.run(ctx -> assertThat(ctx).hasFailed());
 	}
 
-	/** Spring не падает на неразрешённом ${VAR} при биндинге, а оставляет литерал. Он не должен считаться значением. */
+	/** Spring does not fail on an unresolved ${VAR} while binding; it keeps the literal. The literal must not count as a value. */
 	@Test
 	void failsWhenPlaceholderStaysUnresolved() {
 		runner.withPropertyValues(ALL_REQUIRED)

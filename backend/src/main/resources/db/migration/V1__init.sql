@@ -1,3 +1,3 @@
--- Заглушка: реальная схема появится в этапах 1.5 (тенанты), 2 и 4.
--- Миграция нужна, чтобы Flyway создал свою служебную таблицу и конвейер миграций был проверен с первого дня.
+-- Placeholder: the real schema arrives in later migrations (tenants, agent runs, proposals, audit).
+-- The migration makes Flyway create its history table, so the migration pipeline is exercised from day one.
 SELECT 1;

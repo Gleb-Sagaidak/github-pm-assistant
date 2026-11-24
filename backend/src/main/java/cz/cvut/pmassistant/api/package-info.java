@@ -1,4 +1,4 @@
 /**
- * REST-контроллеры и DTO.
+ * REST controllers and DTOs.
  */
 package cz.cvut.pmassistant.api;

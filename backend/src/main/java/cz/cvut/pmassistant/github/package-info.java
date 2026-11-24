@@ -1,4 +1,4 @@
 /**
- * Клиенты GitHub (REST/GraphQL), аутентификация GitHub App.
+ * GitHub clients (REST/GraphQL) and GitHub App authentication.
  */
 package cz.cvut.pmassistant.github;

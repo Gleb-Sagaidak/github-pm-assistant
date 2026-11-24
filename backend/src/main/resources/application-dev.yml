@@ -1,4 +1,4 @@
-# Профиль dev: Postgres из docker-compose.yml в корне репозитория.
+# Profile dev: Postgres from docker-compose.yml in the repository root.
 spring:
   datasource:
     url: ${DB_URL:jdbc:postgresql://localhost:${DB_PORT:5432}/pmassistant}

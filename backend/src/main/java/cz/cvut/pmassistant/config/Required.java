@@ -16,11 +16,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 /**
- * Обязательное строковое значение конфигурации: не пустое и не неразрешённый плейсхолдер.
+ * A required string configuration value: neither blank nor an unresolved placeholder.
  * <p>
- * Spring Boot при биндинге {@code @ConfigurationProperties} не падает на {@code ${VAR}} без дефолта,
- * если переменной нет, а оставляет строку {@code "${VAR}"} как есть, и {@code @NotBlank} её пропускает.
- * Без этой проверки приложение стартовало бы с «секретом» {@code ${ANTHROPIC_API_KEY}}.
+ * When binding {@code @ConfigurationProperties}, Spring Boot does not fail on a {@code ${VAR}} without a default
+ * when the variable is missing; it keeps the literal string {@code "${VAR}"}, which {@code @NotBlank} accepts.
+ * Without this check the application would start with the "secret" {@code ${ANTHROPIC_API_KEY}}.
  */
 @Documented
 @Constraint(validatedBy = {})

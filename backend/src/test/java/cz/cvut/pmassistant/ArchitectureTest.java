@@ -48,7 +48,7 @@ class ArchitectureTest {
 	@ArchTest
 	static final ArchRule agentsOnlyKnowTheLlmPortNotItsAdapters = noClasses()
 			.that().resideInAnyPackage("..agent..", "..proposal..")
-			.should().dependOnClassesThat().resideInAnyPackage("cz.cvut.pmassistant.llm.openai..")
+			.should().dependOnClassesThat().resideInAnyPackage("cz.cvut.pmassistant.llm.gateway..")
 			.allowEmptyShould(true);
 
 	@ArchTest

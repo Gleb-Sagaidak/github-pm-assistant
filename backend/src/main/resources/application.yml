@@ -3,7 +3,7 @@ spring:
     name: pmassistant
   profiles:
     default: dev
-  # Локальный запуск: значения можно положить в .env (в корне репозитория или в backend/), вне git.
+  # Local runs: values may be placed in .env (repository root or backend/), outside git.
   config:
     import:
       - "optional:file:../.env[.properties]"
@@ -12,6 +12,10 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+    properties:
+      # Jackson 2 (brought in by Spring AI's OpenAI SDK) and Jackson 3 are both on the classpath. Our JSON
+      # columns use Jackson 3 types (JsonNode), so Hibernate must be told to use the Jackson 3 mapper.
+      hibernate.type.json_format_mapper: org.hibernate.type.format.jackson.Jackson3JsonFormatMapper
   security:
     oauth2:
       client:
@@ -19,21 +23,39 @@ spring:
           github:
             client-id: ${app.github.client-id}
             client-secret: ${app.github.client-secret}
+  ai:
+    # Spring AI is the transport to the language model; the values come from app.llm.* below.
+    # Only the chat model is used: the other OpenAI features are switched off.
+    model:
+      embedding: none
+      image: none
+      moderation: none
+      audio:
+        speech: none
+        transcription: none
+    openai:
+      base-url: ${app.llm.base-url}
+      api-key: ${app.llm.api-key}
+      timeout: ${app.llm.timeout:120s}
+      max-retries: ${app.llm.max-retries:2}
+      chat:
+        options:
+          model: ${app.llm.model}
 
 app:
   github:
     app-id: ${GITHUB_APP_ID}
-    app-slug: ${GITHUB_APP_SLUG}                  # для ссылки установки
+    app-slug: ${GITHUB_APP_SLUG}                  # used for the installation link
     private-key-path: ${GITHUB_APP_PRIVATE_KEY_PATH}
-    client-id: ${GITHUB_APP_CLIENT_ID}            # OAuth входа пользователей; валидируется в AppProperties
+    client-id: ${GITHUB_APP_CLIENT_ID}            # OAuth for user login; validated in AppProperties
     client-secret: ${GITHUB_APP_CLIENT_SECRET}
-    webhook-secret: ${GITHUB_WEBHOOK_SECRET:}     # этап 8
+    webhook-secret: ${GITHUB_WEBHOOK_SECRET:}     # needed once webhooks are enabled
     api-version: "2026-03-10"
   llm:
     base-url: ${LLM_BASE_URL:https://api.openai.com/v1}   # any OpenAI-compatible server, e.g. http://localhost:11434/v1
     api-key: ${LLM_API_KEY:}                              # empty for servers that need none
     model: ${LLM_MODEL}
-  defaults:                                       # переопределяются на workspace
+  defaults:                                       # can be overridden per workspace
     daily-token-quota: 500000
 
 management:
