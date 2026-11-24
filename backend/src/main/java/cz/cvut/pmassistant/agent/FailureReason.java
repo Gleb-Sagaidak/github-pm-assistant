@@ -14,5 +14,7 @@ public enum FailureReason {
 	TIME_LIMIT,
 	TOKEN_LIMIT,
 	/** The model could not be used (see {@link cz.cvut.pmassistant.llm.LlmUnavailableException}). */
-	LLM_UNAVAILABLE
+	LLM_UNAVAILABLE,
+	/** An unexpected exception in the loop itself (a bug); the run is recorded as failed and the exception rethrown. */
+	INTERNAL_ERROR
 }
