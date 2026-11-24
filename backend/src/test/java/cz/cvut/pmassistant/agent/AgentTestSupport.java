@@ -53,6 +53,21 @@ final class AgentTestSupport {
 		};
 	}
 
+	/** A read tool whose arguments must match the given JSON Schema. */
+	static Tool toolWithSchema(String name, String schemaJson, Function<JsonNode, ToolOutcome> behaviour) {
+		return new Tool() {
+			@Override
+			public ToolSpec spec() {
+				return new ToolSpec(name, "Test tool " + name, json(schemaJson), false);
+			}
+
+			@Override
+			public ToolOutcome execute(JsonNode arguments, RunContext context) {
+				return behaviour.apply(arguments);
+			}
+		};
+	}
+
 	/** The terminal tool, with the given JSON Schema for its arguments. */
 	static ToolSpec terminal(String schemaJson) {
 		return new ToolSpec(TERMINAL, "Submit the final result", json(schemaJson), true);

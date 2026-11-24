@@ -75,6 +75,7 @@ public class AgentLoop {
 		private final Map<String, Integer> callCounts = new HashMap<>();
 		private final Instant startedAt;
 		private final ArgumentValidator finalAnswerValidator;
+		private final Map<String, ArgumentValidator> toolArgumentValidators = new HashMap<>();
 
 		Execution(AgentRunRequest request, RunContext context) {
 			this.request = request;
@@ -85,6 +86,9 @@ public class AgentLoop {
 			this.specs = agent.allSpecs();
 			this.startedAt = context.clock().instant();
 			this.finalAnswerValidator = new ArgumentValidator(agent.terminalTool().inputSchema());
+			for (ToolSpec spec : registry.specs()) {
+				toolArgumentValidators.put(spec.name(), new ArgumentValidator(spec.inputSchema()));
+			}
 		}
 
 		AgentRunResult execute() {
@@ -215,10 +219,17 @@ public class AgentLoop {
 			Instant toolStarted = now();
 			ToolOutcome outcome;
 			Optional<Tool> tool = registry.find(call.name());
+			List<String> problems = tool.isPresent()
+					? toolArgumentValidators.get(call.name()).validate(call.arguments()) : List.of();
 			if (tool.isEmpty()) {
 				outcome = ToolOutcome.error("Unknown tool: " + call.name() + ". Available tools: "
 						+ String.join(", ", registry.specs().stream().map(ToolSpec::name).toList())
 						+ ", " + agent.terminalTool().name());
+			}
+			else if (!problems.isEmpty()) {
+				// Models, small local ones above all, often send arguments that do not fit: say what is wrong.
+				outcome = ToolOutcome.error("The arguments of " + call.name() + " do not match its schema: "
+						+ String.join("; ", problems) + ". Call the tool again with corrected arguments.");
 			}
 			else if (isRepeat(call)) {
 				repeatedCalls++;
